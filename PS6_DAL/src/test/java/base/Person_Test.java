@@ -34,23 +34,65 @@ public class Person_Test {
 		 person1 = new PersonDomainModel();
 		 
 		try {
-			person1Birth = dateFormat.parse("1994-11-27");
+			person1Birth = dateFormat.parse("1994-12-27");
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		
 		person1.setPersonID(person1UUID);
-		person1.setFirstName("Mingkun");
-		person1.setMiddleName("a");
-		person1.setLastName("Chen");
+		person1.setFirstName("Alex");
+		person1.setMiddleName("J");
+		person1.setLastName("Heart");
 		person1.setBirthday(person1Birth);
-		person1.setCity("Elkton");
-		person1.setStreet("702 Stone Gate Blvd");
+		person1.setCity("Collegeville");
+		person1.setStreet("702 Stones Gate Blvd");
 		person1.setPostalCode(21921);
 		
 	}
+	@After
+	public void tearDown() throws Exception {
+		// this delete the person we test after each test
+		PersonDomainModel pers;
+		
+		PersonDAL.deletePerson(person1.getPersonID());
+		pers = PersonDAL.getPerson(person1.getPersonID());
+		assertNull(pers);
+	}
 	
+	@Test
+	public void TestAddPerson(){
+		PersonDomainModel per;
+
+		PersonDAL.addPerson(person1);
+		per = PersonDAL.getPerson(person1.getPersonID());
+		assertNotNull(per);
+		}
+	
+	@Test
+	public void TestUpdatePerson(){
+		PersonDomainModel per;
+		
+		PersonDAL.addPerson(person1);
+		
+		person1.setFirstName("TestName");
+		PersonDAL.updatePerson(person1);
+		
+		per = PersonDAL.getPerson(person1.getPersonID());
+		assertEquals(person1.getFirstName(), "TestName");
+		
+	}
+	
+	@Test
+	public void TestDeletePerson(){
+		PersonDomainModel per;
+		
+		PersonDAL.addPerson(person1);
+		
+		PersonDAL.deletePerson(person1.getPersonID());
+		per = PersonDAL.getPerson(person1.getPersonID());
+		assertNull(per);
+	}
 	
 
 }
